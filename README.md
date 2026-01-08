@@ -10,13 +10,13 @@ Sistem Klinik ini dibuat menggunakan CodeIgniter 4 (CI4) dan MySQL, dengan fitur
 
 
 ## Fungsionalitas 
-SPA dengan jQuery: navigasi menu tanpa reload halaman.
-CRUD data: menggunakan modal Bootstrap + AJAX.
-Validasi form: semua field wajib diisi, menggunakan SweetAlert.
-Feedback aksi: setiap aksi (sukses/gagal) muncul notifikasi SweetAlert.
-Datatables: menampilkan tabel interaktif untuk semua data.
-Cetak detail data: setiap baris bisa dicetak menggunakan window.print().
-Import dummy data pasien: dari JSONPlaceholder.
+1. SPA dengan jQuery: navigasi menu tanpa reload halaman.
+2. CRUD data: menggunakan modal Bootstrap + AJAX.
+3. Validasi form: semua field wajib diisi, menggunakan SweetAlert.
+4. Feedback aksi: setiap aksi (sukses/gagal) muncul notifikasi SweetAlert.
+5. Datatables: menampilkan tabel interaktif untuk semua data.
+6. Cetak detail data: setiap baris bisa dicetak menggunakan window.print().
+7. Import dummy data pasien: dari JSONPlaceholder.
 
 ## Struktur Database
 Tabel user
