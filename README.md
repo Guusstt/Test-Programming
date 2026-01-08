@@ -57,8 +57,8 @@ Tabel asesmen
 
 ## Instalasi
 1. Clone repository:
-   git clone https://github.com/username/nama-repo.git
-   cd nama-repo
+   git clone https://github.com/username/Test-Programming.git
+   cd Test-Programming
    
 2. Copy .env.example menjadi .env dan sesuaikan konfigurasi database:
    database.default.hostname = localhost
