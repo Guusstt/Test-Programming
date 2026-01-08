@@ -1,68 +1,81 @@
 # Sistem Klinik CI4
-Sistem Klinik ini dibuat menggunakan CodeIgniter 4 (CI4) dan MySQL, dengan fitur login multi-level dan manajemen data pasien, kunjungan, asesmen, dan diagnosis. Sistem ini merupakan implementasi dari SPA (Single Page Application) menggunakan jQuery, Bootstrap, dan AJAX, sesuai tugas coding CI4.
-## What is CodeIgniter?
+Sistem Klinik ini dibuat menggunakan CodeIgniter 4 (CI4) dan MySQL, dengan fitur login multi-level dan manajemen data pasien, kunjungan, asesmen, dan diagnosis. Sistem ini merupakan implementasi dari SPA (Single Page Application) menggunakan jQuery, Bootstrap, dan AJAX.
+## Fitur Utama
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+| Role           | Hak Akses                                                 |
+| -------------- | --------------------------------------------------------- |
+|   Superadmin   | Akses penuh ke semua fitur.                               |
+|     Admisi     | CRUD Pendaftaran dan Kunjungan, tidak bisa lihat Asesmen. |
+|    Perawat     | View Pendaftaran & Kunjungan, CRUD Asesmen & Diagnosis.   |
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Fungsionalitas 
+SPA dengan jQuery: navigasi menu tanpa reload halaman.
+CRUD data: menggunakan modal Bootstrap + AJAX.
+Validasi form: semua field wajib diisi, menggunakan SweetAlert.
+Feedback aksi: setiap aksi (sukses/gagal) muncul notifikasi SweetAlert.
+Datatables: menampilkan tabel interaktif untuk semua data.
+Cetak detail data: setiap baris bisa dicetak menggunakan window.print().
+Import dummy data pasien: dari JSONPlaceholder.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## Struktur Database
+Tabel user
+| Kolom    | Tipe                                  | Keterangan      |
+| -------- | ------------------------------------- | --------------- |
+| id       | INT PK AI                             | ID user         |
+| name     | VARCHAR                               | Nama lengkap    |
+| email    | VARCHAR                               | Email login     |
+| password | VARCHAR                               | Password (hash) |
+| role     | ENUM('superadmin','admisi','perawat') | Hak akses       |
 
-## Installation & updates
+Tabel pasien
+| Kolom   | Tipe      | Keterangan    |
+| ------- | --------- | ------------- |
+| id      | INT PK AI | ID pasien     |
+| nama    | VARCHAR   | Nama pasien   |
+| alamat  | VARCHAR   | Alamat pasien |
+| telepon | VARCHAR   | No. telepon   |
+| email   | VARCHAR   | Email pasien  |
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+Tabel kunjungan
+| Kolom      | Tipe      | Keterangan        |
+| ---------- | --------- | ----------------- |
+| id         | INT PK AI | ID kunjungan      |
+| pasien_id  | INT FK    | ID pasien         |
+| tanggal    | DATETIME  | Tanggal kunjungan |
+| keterangan | TEXT      | Catatan kunjungan |
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+Tabel asesmen
+| Kolom        | Tipe      | Keterangan              |
+| ------------ | --------- | ----------------------- |
+| id           | INT PK AI | ID asesmen              |
+| kunjungan_id | INT FK    | ID kunjungan            |
+| perawat_id   | INT FK    | ID perawat              |
+| diagnosis    | TEXT      | Hasil diagnosa          |
+| tindakan     | TEXT      | Tindakan yang diberikan |
 
-## Setup
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+## Instalasi
+1. Clone repository:
+   git clone https://github.com/username/nama-repo.git
+   cd nama-repo
+   
+2. Copy .env.example menjadi .env dan sesuaikan konfigurasi database:
+   database.default.hostname = localhost
+   database.default.database = nama_database
+   database.default.username = root
+   database.default.password =
+   
+3. Jalankan migrasi (jika menggunakan migrasi CI4):
+   php spark migrate
+   
+4. Jalankan server CI4:
+   php spark serve
 
-## Important Change with index.php
+5. Buka browser:
+   http://localhost:8080
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 8.1 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+## Teknologi
+1. Backend: CodeIgniter 4 (PHP)
+2. Database: MySQL
+3. Frontend: Bootstrap 5, jQuery, AJAX, SweetAlert, DataTables
