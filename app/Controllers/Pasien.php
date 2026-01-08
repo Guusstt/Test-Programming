@@ -1,0 +1,107 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Controllers\BaseController;
+use App\Models\PasienModel;
+
+class Pasien extends BaseController
+{
+    protected $pasienModel;
+
+    public function __construct()
+    {
+        $this->pasienModel = new PasienModel();
+    }
+
+    public function index()
+    {
+        $data = [
+            'pasien' => $this->pasienModel->orderBy('id', 'DESC')->findAll()
+        ];
+        return view('pasien/index_spa', $data);
+    }
+
+    public function getData()
+    {
+        $total = $this->pasienModel->countAll();
+
+        if ($total == 0) {
+            $client = \Config\Services::curlrequest();
+
+            try {
+                $response = $client->request('GET', 'https://jsonplaceholder.typicode.com/users');
+                $users = json_decode($response->getBody());
+
+                foreach ($users as $user) {
+                    $this->pasienModel->save([
+                        'nama' => $user->name,
+                        'norm' => 'RM-' . rand(1000, 9999),
+                        'alamat' => $user->address->street . ', ' . $user->address->city
+                    ]);
+                }
+            } catch (\Exception $e) {
+                return $this->response->setJSON([
+                    'data' => [],
+                    'error' => 'Gagal mengambil data dummy'
+                ]);
+            }
+        }
+        $data = $this->pasienModel->orderBy('id', 'DESC')->findAll();
+
+        return $this->response->setJSON([
+            'data' => $data
+        ]);
+    }
+
+
+    public function getOne($id)
+    {
+        $data = $this->pasienModel->find($id);
+        return $this->response->setJSON($data);
+    }
+    public function save()
+    {
+        if (
+            !$this->validate([
+                'nama' => 'required',
+                'norm' => 'required'
+            ])
+        ) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'errors' => \Config\Services::validation()->getErrors()
+            ]);
+        }
+
+        $id = $this->request->getPost('id');
+        $data = [
+            'nama' => $this->request->getPost('nama'),
+            'norm' => $this->request->getPost('norm'),
+            'alamat' => $this->request->getPost('alamat'),
+        ];
+
+        if ($id) {
+            $this->pasienModel->update($id, $data);
+            $message = 'Data berhasil diupdate';
+        } else {
+            $this->pasienModel->save($data);
+            $message = 'Data berhasil ditambahkan';
+        }
+
+        return $this->response->setJSON(['status' => 'success', 'message' => $message]);
+    }
+
+    public function deleteAjax($id)
+    {
+        $this->pasienModel->delete($id);
+        return $this->response->setJSON(['status' => 'success', 'message' => 'Data berhasil dihapus']);
+    }
+
+
+    public function detail($id)
+    {
+        $data = $this->pasienModel->find($id);
+        return $this->response->setJSON($data);
+    }
+}
