@@ -54,27 +54,6 @@ Tabel asesmen
 | diagnosis    | TEXT      | Hasil diagnosa          |
 | tindakan     | TEXT      | Tindakan yang diberikan |
 
-
-## Instalasi
-1. Clone repository:
-   git clone https://github.com/username/Test-Programming.git
-   cd Test-Programming
-   
-2. Copy .env.example menjadi .env dan sesuaikan konfigurasi database:
-   database.default.hostname = localhost
-   database.default.database = nama_database
-   database.default.username = root
-   database.default.password =
-   
-3. Jalankan migrasi (jika menggunakan migrasi CI4):
-   php spark migrate
-   
-4. Jalankan server CI4:
-   php spark serve
-
-5. Buka browser:
-   http://localhost:8080
-
 ## Teknologi
 1. Backend: CodeIgniter 4 (PHP)
 2. Database: MySQL
