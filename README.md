@@ -1,5 +1,5 @@
-# CodeIgniter 4 Application Starter
-
+# Sistem Klinik CI4
+Sistem Klinik ini dibuat menggunakan CodeIgniter 4 (CI4) dan MySQL, dengan fitur login multi-level dan manajemen data pasien, kunjungan, asesmen, dan diagnosis. Sistem ini merupakan implementasi dari SPA (Single Page Application) menggunakan jQuery, Bootstrap, dan AJAX, sesuai tugas coding CI4.
 ## What is CodeIgniter?
 
 CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
