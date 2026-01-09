@@ -8,6 +8,9 @@
         <button class="btn btn-primary" id="btnTambah">
             <i class="fas fa-plus"></i> Tambah Pasien
         </button>
+        <button class="btn btn-success" id="btnGetData">
+            <i class="fas fa-download"></i> Get Data
+        </button>
     </div>
 </div>
 
@@ -111,7 +114,7 @@
         function initDataTable() {
             table = $('#tablePasien').DataTable({
                 ajax: {
-                    url: '/pasien/getData',
+                    url: '/pasien/loadData',
                     dataSrc: 'data'
                 },
                 columns: [
@@ -144,7 +147,6 @@
                 language: {
                     url: "<?= base_url('assets/datatables/id.json') ?>"
                 }
-
             });
         }
 
@@ -155,6 +157,44 @@
             $('#formPasien')[0].reset();
             $('#id').val('');
             $('#modalForm').modal('show');
+        });
+
+        $('#btnGetData').click(function () {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: "Apakah Anda yakin ingin menambahkan data?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Tambahkan!',
+                cancelButtonText: 'Batal',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return $.ajax({
+                        url: '/pasien/getData',
+                        type: 'GET',
+                        dataType: 'json'
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.value.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: result.value.message,
+                            timer: 2000
+                        });
+                        table.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: result.value.message,
+                        });
+                    }
+                }
+            });
         });
 
         $(document).on('click', '.btnEdit', function () {
@@ -257,43 +297,6 @@
                             });
                         }
                     });
-                }
-            });
-        });
-
-        $('#btnImport').click(function () {
-            Swal.fire({
-                title: 'Import Data Dummy',
-                text: "Import 10 data pasien dari JSONPlaceholder?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Import!',
-                cancelButtonText: 'Batal',
-                showLoaderOnConfirm: true,
-                preConfirm: () => {
-                    return $.ajax({
-                        url: '/pasien/import',
-                        type: 'POST',
-                        dataType: 'json'
-                    });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    if (result.value.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: result.value.message,
-                        });
-                        table.ajax.reload();
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal Import',
-                            text: result.value.message,
-                        });
-                    }
                 }
             });
         });

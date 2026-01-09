@@ -8,6 +8,11 @@ class Dashboard extends BaseController
 {
     public function index()
     {
+        $data = [
+            'title' => 'Dashboard',
+            'session_data' => session()->get()
+        ];
+        return view('dashboard', $data);
         if (!session()->get('isLoggedIn')) {
             return redirect()->to('/');
         }

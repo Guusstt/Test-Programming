@@ -21,37 +21,50 @@ class Auth extends BaseController
         $session = session();
         $model = new UserModel();
 
-        $username = $this->request->getPost('username');
-        $password = $this->request->getPost('password');
+        $username = $this->request->getVar('username');
+        $password = $this->request->getVar('password');
 
-        $data = $model->where('username', $username)->first();
+        $user = $model->where('username', $username)->first();
 
-        if ($data) {
-            $pass = $data['password'];
-            if (password_verify($password, $pass)) {
+        if ($user) {
+
+            if (password_verify($password, $user['password'])) {
+
                 $ses_data = [
-                    'id' => $data['id'],
-                    'username' => $data['username'],
-                    'role' => $data['role'],
-                    'nama' => $data['nama_lengkap'],
+                    'id_user' => $user['id'],
+                    'username' => $user['username'],
+                    'nama' => $user['nama_lengkap'],
+                    'role' => $user['role'],
                     'isLoggedIn' => TRUE
                 ];
                 $session->set($ses_data);
+
                 return redirect()->to('/dashboard');
             } else {
-                $session->setFlashdata('msg', 'Password Salah');
-                return redirect()->to('/');
+                return redirect()->to('/')->with('msg', 'Password salah!');
             }
         } else {
-            $session->setFlashdata('msg', 'Username tidak ditemukan');
-            return redirect()->to('/');
+            return redirect()->to('/')->with('msg', 'Username tidak ditemukan!');
         }
     }
 
     public function logout()
     {
-        $session = session();
-        $session->destroy();
+        session()->destroy();
         return redirect()->to('/');
+    }
+
+    public function checkSession()
+    {
+        echo "<h2>Session Debug Info</h2>";
+        echo "<pre>";
+        print_r(session()->get());
+        echo "</pre>";
+
+        echo "<h3>Is Logged In?</h3>";
+        echo session()->get('isLoggedIn') ? 'YES' : 'NO';
+
+        echo "<h3>Session ID</h3>";
+        echo session_id();
     }
 }

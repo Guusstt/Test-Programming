@@ -37,6 +37,7 @@ abstract class BaseController extends Controller
         // $this->helpers = ['form', 'url'];
 
         // Caution: Do not edit this line.
+        $this->session = \Config\Services::session();
         parent::initController($request, $response, $logger);
 
         // Preload any models, libraries, etc, here.

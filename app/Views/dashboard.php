@@ -3,6 +3,10 @@
 <?= $this->section('content'); ?>
 <div class="card">
     <div class="card-body">
+        <div class="alert alert-info">
+            <strong>Session Info:</strong>
+            <pre><?= print_r($session_data, true) ?></pre>
+        </div>
         <h3>Dashboard Utama</h3>
         <p class="lead">Selamat datang di aplikasi Sistem Manajemen Klinik.</p>
         <hr>
